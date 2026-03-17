@@ -4,6 +4,9 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Россильбер | Направление</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Space+Grotesk:wght@600;700&display=swap" rel="stylesheet">
   <style>
     :root {
       --bg-1: #02091c;
@@ -13,46 +16,165 @@
       --text: #eaf1ff;
       --muted: #a5b3cf;
       --primary: #4f8dff;
+<<<<<<< codex/update-landing-page-ui/ux-0rtft9
+      --success: #37cf9f;
+=======
       --accent: #9fc1ff;
+>>>>>>> main
       color-scheme: dark;
     }
+
     * { box-sizing: border-box; }
 
     body {
       margin: 0;
+      min-height: 100vh;
       font-family: Inter, "Segoe UI", sans-serif;
       color: var(--text);
       background:
         radial-gradient(900px 500px at 8% -10%, #15336e 0%, transparent 60%),
         linear-gradient(180deg, var(--bg-2) 0%, var(--bg-1) 58%);
+<<<<<<< codex/update-landing-page-ui/ux-0rtft9
+=======
       min-height: 100vh;
+>>>>>>> main
     }
 
-    .wrap {
-      max-width: 1240px;
+    .bg-grid {
+      position: fixed;
+      inset: 0;
+      pointer-events: none;
+      opacity: 0.18;
+      background-image:
+        linear-gradient(to right, rgba(94, 140, 233, 0.2) 1px, transparent 1px),
+        linear-gradient(to bottom, rgba(94, 140, 233, 0.2) 1px, transparent 1px);
+      background-size: 32px 32px;
+      z-index: 0;
+    }
+
+    .shell-header,
+    .layout {
+      position: relative;
+      z-index: 1;
+      max-width: 1440px;
       margin: 0 auto;
-      padding: 30px 20px 36px;
+      width: 100%;
     }
 
-    .top-line {
+    .shell-header {
+      position: sticky;
+      top: 0;
+      padding: 1.25rem 2rem;
+      border-bottom: 1px solid var(--card-border);
+      backdrop-filter: blur(12px);
+      background: rgba(2, 9, 28, 0.78);
       display: flex;
       justify-content: space-between;
       align-items: center;
+<<<<<<< codex/update-landing-page-ui/ux-0rtft9
+      gap: 1rem;
+=======
       border-bottom: 1px solid var(--card-border);
       padding-bottom: 16px;
       margin-bottom: 24px;
       gap: 12px;
       flex-wrap: wrap;
+>>>>>>> main
     }
 
-    .back {
+    .brand__title {
+      margin: 0;
+      font-family: "Space Grotesk", Inter, sans-serif;
+      font-size: clamp(1.25rem, 2.2vw, 2rem);
+      letter-spacing: 0.02em;
+    }
+
+    .header-actions {
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+      margin-left: auto;
+    }
+
+    .search {
+      border: 1px solid rgba(79, 141, 255, 0.38);
+      background: rgba(6, 20, 51, 0.7);
+      border-radius: 0.75rem;
+      min-width: 320px;
+      display: flex;
+      align-items: center;
+      gap: 0.4rem;
+      padding: 0 0.75rem;
       color: var(--muted);
-      text-decoration: none;
-      font-size: 14px;
     }
 
-    .back:hover { color: var(--text); }
+    .search input {
+      width: 100%;
+      border: 0;
+      outline: 0;
+      background: transparent;
+      color: var(--text);
+      font-size: 0.92rem;
+      padding: 0.7rem 0;
+    }
 
+    .btn {
+      text-decoration: none;
+      border: 1px solid var(--card-border);
+      color: var(--text);
+      border-radius: 0.75rem;
+      background: rgba(10, 24, 56, 0.85);
+      padding: 0.72rem 1rem;
+      font-size: 0.9rem;
+      font-weight: 600;
+      white-space: nowrap;
+      transition: 0.2s ease;
+      cursor: pointer;
+    }
+
+    .btn:hover { border-color: var(--primary); transform: translateY(-1px); }
+
+<<<<<<< codex/update-landing-page-ui/ux-0rtft9
+    .layout {
+      padding: 1rem;
+      display: grid;
+      grid-template-columns: 260px 1fr;
+      gap: 0.9rem;
+    }
+
+    .sidebar,
+    .content {
+      border: 1px solid var(--card-border);
+      border-radius: 1rem;
+      background: rgba(4, 15, 43, 0.72);
+    }
+
+    .sidebar { padding: 1rem; }
+    .sidebar h2 { margin: 0 0 0.8rem; font-size: 1.9rem; }
+
+    #dept-nav {
+      display: grid;
+      gap: 0.45rem;
+      margin-bottom: 0.9rem;
+    }
+
+    .nav-btn {
+      border: 1px solid transparent;
+      background: rgba(20, 35, 72, 0.65);
+      color: var(--text);
+      border-radius: 0.65rem;
+      padding: 0.55rem 0.65rem;
+      text-align: left;
+      font-size: 0.95rem;
+      cursor: pointer;
+      transition: 0.2s ease;
+    }
+
+    .nav-btn:hover,
+    .nav-btn.active {
+      border-color: var(--primary);
+      background: rgba(79, 141, 255, 0.15);
+=======
     .badge {
       border: 1px solid var(--card-border);
       border-radius: 999px;
@@ -61,55 +183,58 @@
       font-size: 12px;
       background: rgba(10, 24, 56, 0.75);
       backdrop-filter: blur(1px);
+>>>>>>> main
     }
 
-    h1 {
+    .status-card {
+      border: 1px solid rgba(55, 207, 159, 0.35);
+      background: rgba(10, 55, 61, 0.35);
+      border-radius: 0.85rem;
+      padding: 0.85rem;
+      color: #c3efe2;
+    }
+
+    .status-card h3 { margin: 0 0 0.55rem; }
+    .status-card p { margin: 0; color: #c1ddd5; }
+
+    .content { padding: 1rem; }
+
+    .section-title {
       margin: 0;
-      text-transform: uppercase;
-      letter-spacing: .18em;
-      font-size: clamp(40px, 5vw, 56px);
-      line-height: 1;
-      font-weight: 700;
+      font-size: clamp(1.6rem, 2.1vw, 2.1rem);
     }
 
     .subtitle {
-      margin: 10px 0 0;
+      margin: 0.45rem 0 0.8rem;
       color: var(--muted);
-      font-size: clamp(14px, 2vw, 31px);
+      font-size: 1rem;
     }
 
     .toolbar {
-      margin-top: 18px;
-      margin-bottom: 16px;
+      margin: 0 0 1rem;
       display: flex;
       justify-content: space-between;
       align-items: center;
-      gap: 12px;
+      gap: 0.8rem;
       flex-wrap: wrap;
     }
 
-    .toolbar .badge { max-width: 560px; }
-
-    .add-btn {
-      border: 0;
-      background: var(--accent);
-      color: #121722;
-      border-radius: 14px;
-      padding: 12px 22px;
-      font-size: 16px;
-      font-weight: 700;
-      cursor: pointer;
+    .info-chip {
+      border: 1px solid var(--card-border);
+      border-radius: 999px;
+      padding: 0.5rem 0.8rem;
+      color: var(--muted);
+      font-size: 0.82rem;
+      background: rgba(10, 24, 56, 0.6);
     }
 
-    .add-btn:hover { filter: brightness(1.05); }
-
-    .grid {
+    .project-grid {
       display: grid;
       grid-template-columns: repeat(4, minmax(0, 1fr));
-      gap: 14px;
+      gap: 0.9rem;
     }
 
-    .card {
+    .project-card {
       min-height: 178px;
       border-radius: 14px;
       border: 1px solid var(--card-border);
@@ -123,7 +248,11 @@
       transition: .2s ease;
     }
 
+<<<<<<< codex/update-landing-page-ui/ux-0rtft9
+    .project-card:hover {
+=======
     .card:hover {
+>>>>>>> main
       transform: translateY(-1px);
       border-color: var(--primary);
       box-shadow: 0 10px 24px rgba(3, 11, 31, 0.45);
@@ -136,9 +265,15 @@
     }
 
     .icon { font-size: 24px; line-height: 1; }
+<<<<<<< codex/update-landing-page-ui/ux-0rtft9
+    .project-card h3 { margin: 0; font-size: 1.05rem; line-height: 1.2; }
+    .project-card p { margin: 0; color: var(--muted); font-size: 0.9rem; line-height: 1.4; }
+    .hint { margin-top: auto; color: #b9d0ff; font-size: 0.82rem; }
+=======
     .card h3 { margin: 0; font-size: 18px; line-height: 1.2; }
     .card p { margin: 0; color: var(--muted); font-size: 14px; line-height: 1.4; }
     .hint { margin-top: auto; color: var(--accent); font-size: 13px; }
+>>>>>>> main
 
     .empty {
       border: 1px dashed var(--card-border);
@@ -196,31 +331,60 @@
       cursor: pointer;
     }
 
-    @media (max-width: 1160px) { .grid { grid-template-columns: repeat(3, minmax(0, 1fr)); } }
-    @media (max-width: 900px)  { .grid { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
-    @media (max-width: 620px)  { .grid { grid-template-columns: 1fr; } }
+    @media (max-width: 1200px) { .project-grid { grid-template-columns: repeat(3, minmax(0, 1fr)); } }
+
+    @media (max-width: 980px) {
+      .layout { grid-template-columns: 1fr; }
+      .shell-header { flex-direction: column; align-items: flex-start; }
+      .header-actions { width: 100%; }
+      .search { min-width: 100%; }
+    }
+
+    @media (max-width: 760px) {
+      .project-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+      .header-actions { flex-direction: column; align-items: stretch; }
+    }
+
+    @media (max-width: 620px) { .project-grid { grid-template-columns: 1fr; } }
   </style>
 </head>
 <body>
-  <div class="wrap">
-    <div class="top-line">
-      <a class="back" href="index.html">← На главную</a>
-      <div id="counter" class="badge"></div>
-    </div>
+  <div class="bg-grid" aria-hidden="true"></div>
 
-    <header>
-      <h1>РОССИЛЬБЕР</h1>
+  <header class="shell-header">
+    <h1 class="brand__title">Корпоративный портал Россильбер</h1>
+    <div class="header-actions">
+      <label class="search" aria-label="Поиск по проектам и направлениям">
+        🔎
+        <input id="global-search" type="search" placeholder="Поиск по проектам и направлениям">
+      </label>
+      <a class="btn" href="index.html">На главную</a>
+    </div>
+  </header>
+
+  <main class="layout">
+    <aside class="sidebar">
+      <h2>Направления</h2>
+      <nav id="dept-nav" aria-label="Навигация по направлениям"></nav>
+      <section class="status-card">
+        <h3>Шина интеграций</h3>
+        <p>Единый визуал и UX для всех департаментов. Добавленные проекты сохраняются отдельно по каждому направлению.</p>
+      </section>
+    </aside>
+
+    <section class="content">
+      <h2 class="section-title" id="dept-title"></h2>
       <p id="subtitle" class="subtitle"></p>
-    </header>
 
-    <div class="toolbar">
-      <div class="badge">Базовые и пользовательские проекты хранятся отдельно по каждому направлению</div>
-      <button id="addProjectBtn" class="add-btn" type="button">+ Добавить проект</button>
-    </div>
+      <div class="toolbar">
+        <div class="info-chip" id="counter"></div>
+        <button id="addProjectBtn" class="btn" type="button">+ Добавить проект</button>
+      </div>
 
-    <main id="projectsGrid" class="grid"></main>
-    <div id="emptyState" class="empty" hidden>Пока нет проектов. Добавьте первый проект кнопкой «Добавить проект».</div>
-  </div>
+      <main id="projectsGrid" class="project-grid"></main>
+      <div id="emptyState" class="empty" hidden>Пока нет проектов. Добавьте первый проект кнопкой «Добавить проект».</div>
+    </section>
+  </main>
 
   <dialog id="projectDialog">
     <form class="modal-body" id="projectForm">
@@ -251,7 +415,7 @@
 
       <div class="actions">
         <button type="button" class="ghost" id="cancelBtn">Отмена</button>
-        <button type="submit" class="add-btn">Сохранить</button>
+        <button type="submit" class="btn">Сохранить</button>
       </div>
     </form>
   </dialog>
@@ -340,12 +504,16 @@
     const dept = DEPARTMENTS[deptKey] || DEPARTMENTS.legal;
     const storageKey = `corp_projects_${deptKey}`;
 
-    document.title = `Россильбер | ${dept.name}`;
-    document.getElementById('subtitle').textContent = `${dept.icon} ${dept.subtitle}`;
-    document.getElementById('counter').textContent = `Направление: ${dept.name}`;
-
+    const deptTitle = document.getElementById('dept-title');
+    const deptSubtitle = document.getElementById('subtitle');
+    const counter = document.getElementById('counter');
     const grid = document.getElementById('projectsGrid');
     const emptyState = document.getElementById('emptyState');
+    const searchInput = document.getElementById('global-search');
+
+    document.title = `Россильбер | ${dept.name}`;
+    deptTitle.textContent = `${dept.icon} ${dept.name}`;
+    deptSubtitle.textContent = dept.subtitle;
 
     function readCustomProjects() {
       try {
@@ -357,22 +525,44 @@
       }
     }
 
-    function renderProjects() {
+    function renderDepartmentNav() {
+      const nav = document.getElementById('dept-nav');
+      nav.innerHTML = '';
+      Object.entries(DEPARTMENTS).forEach(([key, item]) => {
+        const button = document.createElement('button');
+        button.className = 'nav-btn';
+        button.type = 'button';
+        button.textContent = item.name;
+        button.classList.toggle('active', key === deptKey);
+        button.addEventListener('click', () => {
+          window.location.href = `departments.html?dept=${key}`;
+        });
+        nav.appendChild(button);
+      });
+    }
+
+    function renderProjects(query = '') {
       grid.innerHTML = '';
       const currentCustom = readCustomProjects();
       const baseProjects = getBaseProjectsByDepartment(deptKey, dept);
       const merged = [...baseProjects, ...currentCustom];
+      const normalizedQuery = query.trim().toLowerCase();
+      const filtered = normalizedQuery
+        ? merged.filter((project) => `${project.title} ${project.description}`.toLowerCase().includes(normalizedQuery))
+        : merged;
 
-      if (!merged.length) {
+      counter.textContent = `Направление: ${dept.name} · Проектов: ${filtered.length}`;
+
+      if (!filtered.length) {
         emptyState.hidden = false;
         return;
       }
 
       emptyState.hidden = true;
 
-      merged.forEach((project) => {
+      filtered.forEach((project) => {
         const card = document.createElement('a');
-        card.className = 'card';
+        card.className = 'project-card';
         card.href = project.url;
         card.target = project.url.startsWith('http') ? '_blank' : '_self';
         card.rel = project.url.startsWith('http') ? 'noopener noreferrer' : '';
@@ -412,9 +602,30 @@
 
       form.reset();
       dialog.close();
-      renderProjects();
+      renderProjects(searchInput.value);
     });
 
+    searchInput.addEventListener('input', () => {
+      renderProjects(searchInput.value);
+    });
+
+    searchInput.addEventListener('keydown', (event) => {
+      if (event.key !== 'Enter') {
+        return;
+      }
+
+      const query = searchInput.value.trim().toLowerCase();
+      if (!query) {
+        return;
+      }
+
+      const matchedDepartment = Object.entries(DEPARTMENTS).find(([, item]) => item.name.toLowerCase().includes(query));
+      if (matchedDepartment && matchedDepartment[0] !== deptKey) {
+        window.location.href = `departments.html?dept=${matchedDepartment[0]}`;
+      }
+    });
+
+    renderDepartmentNav();
     renderProjects();
   </script>
 </body>
