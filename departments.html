@@ -522,7 +522,6 @@
     addBtn.addEventListener('click', () => dialog.showModal());
     document.getElementById('closeDialog').addEventListener('click', () => dialog.close());
     document.getElementById('cancelBtn').addEventListener('click', () => dialog.close());
-
     form.addEventListener('submit', (event) => {
       event.preventDefault();
       const data = new FormData(form);
