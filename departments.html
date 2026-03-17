@@ -6,14 +6,15 @@
   <title>Россильбер | Направление</title>
   <style>
     :root {
-      --bg: #070b16;
-      --bg-2: #0c1324;
-      --card: #111827;
-      --card-2: #1a2234;
-      --line: #27324a;
-      --text: #e9edf5;
-      --muted: #a7afbf;
-      --accent: #e4c981;
+      --bg-1: #02091c;
+      --bg-2: #061533;
+      --card: #0d1c39;
+      --card-border: rgba(123, 159, 235, 0.24);
+      --text: #eaf1ff;
+      --muted: #a5b3cf;
+      --primary: #4f8dff;
+      --accent: #9fc1ff;
+      color-scheme: dark;
     }
     * { box-sizing: border-box; }
 
@@ -22,8 +23,8 @@
       font-family: Inter, "Segoe UI", sans-serif;
       color: var(--text);
       background:
-        radial-gradient(900px 440px at 50% 0%, #18243c 0%, transparent 72%),
-        linear-gradient(180deg, var(--bg-2) 0%, var(--bg) 55%);
+        radial-gradient(900px 500px at 8% -10%, #15336e 0%, transparent 60%),
+        linear-gradient(180deg, var(--bg-2) 0%, var(--bg-1) 58%);
       min-height: 100vh;
     }
 
@@ -37,7 +38,7 @@
       display: flex;
       justify-content: space-between;
       align-items: center;
-      border-bottom: 1px solid var(--line);
+      border-bottom: 1px solid var(--card-border);
       padding-bottom: 16px;
       margin-bottom: 24px;
       gap: 12px;
@@ -53,12 +54,12 @@
     .back:hover { color: var(--text); }
 
     .badge {
-      border: 1px solid var(--line);
+      border: 1px solid var(--card-border);
       border-radius: 999px;
       padding: 8px 14px;
       color: var(--muted);
       font-size: 12px;
-      background: rgba(17, 24, 39, .65);
+      background: rgba(10, 24, 56, 0.75);
       backdrop-filter: blur(1px);
     }
 
@@ -111,8 +112,8 @@
     .card {
       min-height: 178px;
       border-radius: 14px;
-      border: 1px solid var(--line);
-      background: linear-gradient(115deg, var(--card) 0%, var(--card-2) 100%);
+      border: 1px solid var(--card-border);
+      background: linear-gradient(130deg, rgba(13, 28, 57, 0.95), rgba(12, 28, 64, 0.5));
       text-decoration: none;
       color: inherit;
       padding: 14px;
@@ -123,18 +124,24 @@
     }
 
     .card:hover {
-      transform: translateY(-2px);
-      border-color: #344360;
-      box-shadow: 0 10px 26px rgba(5, 8, 14, .42);
+      transform: translateY(-1px);
+      border-color: var(--primary);
+      box-shadow: 0 10px 24px rgba(3, 11, 31, 0.45);
     }
 
-    .icon { font-size: 30px; line-height: 1; }
-    .card h3 { margin: 0; font-size: 15px; line-height: 1.25; }
-    .card p { margin: 0; color: var(--muted); font-size: 12px; line-height: 1.4; }
+    .card-head {
+      display: flex;
+      align-items: flex-start;
+      gap: 8px;
+    }
+
+    .icon { font-size: 24px; line-height: 1; }
+    .card h3 { margin: 0; font-size: 18px; line-height: 1.2; }
+    .card p { margin: 0; color: var(--muted); font-size: 14px; line-height: 1.4; }
     .hint { margin-top: auto; color: var(--accent); font-size: 13px; }
 
     .empty {
-      border: 1px dashed var(--line);
+      border: 1px dashed var(--card-border);
       border-radius: 14px;
       padding: 18px;
       color: var(--muted);
@@ -143,9 +150,9 @@
 
     dialog {
       width: min(560px, 94vw);
-      border: 1px solid var(--line);
+      border: 1px solid var(--card-border);
       border-radius: 14px;
-      background: #121a2a;
+      background: #0d1c39;
       color: var(--text);
       padding: 0;
     }
@@ -169,10 +176,10 @@
 
     input, textarea {
       width: 100%;
-      border: 1px solid var(--line);
+      border: 1px solid var(--card-border);
       border-radius: 8px;
       padding: 10px 11px;
-      background: #0e1523;
+      background: rgba(5, 19, 49, 0.55);
       color: var(--text);
       font: inherit;
       font-size: 14px;
@@ -182,7 +189,7 @@
     .actions { margin-top: 14px; display: flex; justify-content: flex-end; gap: 8px; }
     .ghost {
       border: 0;
-      background: #2a3448;
+      background: rgba(20, 35, 72, 0.8);
       color: var(--text);
       border-radius: 10px;
       padding: 10px 13px;
@@ -370,8 +377,10 @@
         card.target = project.url.startsWith('http') ? '_blank' : '_self';
         card.rel = project.url.startsWith('http') ? 'noopener noreferrer' : '';
         card.innerHTML = `
-          <div class="icon">${project.icon || '🧩'}</div>
-          <h3>${project.title}</h3>
+          <div class="card-head">
+            <div class="icon">${project.icon || '🧩'}</div>
+            <h3>${project.title}</h3>
+          </div>
           <p>${project.description}</p>
           <div class="hint">Открыть проект →</div>
         `;
