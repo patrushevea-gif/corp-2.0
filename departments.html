@@ -16,7 +16,11 @@
       --text: #eaf1ff;
       --muted: #a5b3cf;
       --primary: #4f8dff;
+<<<<<<< codex/update-landing-page-ui/ux-0rtft9
       --success: #37cf9f;
+=======
+      --accent: #9fc1ff;
+>>>>>>> main
       color-scheme: dark;
     }
 
@@ -30,6 +34,10 @@
       background:
         radial-gradient(900px 500px at 8% -10%, #15336e 0%, transparent 60%),
         linear-gradient(180deg, var(--bg-2) 0%, var(--bg-1) 58%);
+<<<<<<< codex/update-landing-page-ui/ux-0rtft9
+=======
+      min-height: 100vh;
+>>>>>>> main
     }
 
     .bg-grid {
@@ -63,7 +71,15 @@
       display: flex;
       justify-content: space-between;
       align-items: center;
+<<<<<<< codex/update-landing-page-ui/ux-0rtft9
       gap: 1rem;
+=======
+      border-bottom: 1px solid var(--card-border);
+      padding-bottom: 16px;
+      margin-bottom: 24px;
+      gap: 12px;
+      flex-wrap: wrap;
+>>>>>>> main
     }
 
     .brand__title {
@@ -118,6 +134,7 @@
 
     .btn:hover { border-color: var(--primary); transform: translateY(-1px); }
 
+<<<<<<< codex/update-landing-page-ui/ux-0rtft9
     .layout {
       padding: 1rem;
       display: grid;
@@ -157,6 +174,16 @@
     .nav-btn.active {
       border-color: var(--primary);
       background: rgba(79, 141, 255, 0.15);
+=======
+    .badge {
+      border: 1px solid var(--card-border);
+      border-radius: 999px;
+      padding: 8px 14px;
+      color: var(--muted);
+      font-size: 12px;
+      background: rgba(10, 24, 56, 0.75);
+      backdrop-filter: blur(1px);
+>>>>>>> main
     }
 
     .status-card {
@@ -221,7 +248,11 @@
       transition: .2s ease;
     }
 
+<<<<<<< codex/update-landing-page-ui/ux-0rtft9
     .project-card:hover {
+=======
+    .card:hover {
+>>>>>>> main
       transform: translateY(-1px);
       border-color: var(--primary);
       box-shadow: 0 10px 24px rgba(3, 11, 31, 0.45);
@@ -234,9 +265,15 @@
     }
 
     .icon { font-size: 24px; line-height: 1; }
+<<<<<<< codex/update-landing-page-ui/ux-0rtft9
     .project-card h3 { margin: 0; font-size: 1.05rem; line-height: 1.2; }
     .project-card p { margin: 0; color: var(--muted); font-size: 0.9rem; line-height: 1.4; }
     .hint { margin-top: auto; color: #b9d0ff; font-size: 0.82rem; }
+=======
+    .card h3 { margin: 0; font-size: 18px; line-height: 1.2; }
+    .card p { margin: 0; color: var(--muted); font-size: 14px; line-height: 1.4; }
+    .hint { margin-top: auto; color: var(--accent); font-size: 13px; }
+>>>>>>> main
 
     .empty {
       border: 1px dashed var(--card-border);
