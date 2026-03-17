@@ -133,17 +133,6 @@
       backdrop-filter: blur(1px);
     }
 
-    .status-card {
-      border: 1px solid rgba(55, 207, 159, 0.35);
-      background: rgba(10, 55, 61, 0.35);
-      border-radius: 0.85rem;
-      padding: 0.85rem;
-      color: #c3efe2;
-    }
-
-    .status-card h3 { margin: 0 0 0.55rem; }
-    .status-card p { margin: 0; color: #c1ddd5; }
-
     .content { padding: 1rem; }
 
     .section-title {
@@ -300,15 +289,6 @@
   </header>
 
   <main class="layout">
-    <aside class="sidebar">
-      <h2>Направления</h2>
-      <nav id="dept-nav" aria-label="Навигация по направлениям"></nav>
-      <section class="status-card">
-        <h3>Шина интеграций</h3>
-        <p>Единый визуал и UX для всех департаментов. Добавленные проекты сохраняются отдельно по каждому направлению.</p>
-      </section>
-    </aside>
-
     <section class="content">
       <h2 class="section-title" id="dept-title"></h2>
       <p id="subtitle" class="subtitle"></p>
@@ -464,6 +444,10 @@
 
     function renderDepartmentNav() {
       const nav = document.getElementById('dept-nav');
+      if (!nav) {
+        return;
+      }
+
       nav.innerHTML = '';
       Object.entries(DEPARTMENTS).forEach(([key, item]) => {
         const button = document.createElement('button');
