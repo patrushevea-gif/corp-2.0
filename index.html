@@ -4,225 +4,359 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Россильбер | Корпоративный портал</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Space+Grotesk:wght@600;700&display=swap" rel="stylesheet">
   <style>
     :root {
-      --bg: #070b16;
-      --bg-2: #0c1324;
-      --card: #111827;
-      --card-2: #1a2234;
-      --line: #27324a;
-      --text: #e9edf5;
-      --muted: #a7afbf;
+      --bg-1: #02091c;
+      --bg-2: #061533;
+      --card: #0d1c39;
+      --card-border: rgba(123, 159, 235, 0.24);
+      --text: #eaf1ff;
+      --muted: #a5b3cf;
+      --primary: #4f8dff;
+      --success: #37cf9f;
+      color-scheme: dark;
     }
 
     * { box-sizing: border-box; }
 
-    html { background: #070b16; }
-
     body {
       margin: 0;
+      min-height: 100vh;
       font-family: Inter, "Segoe UI", sans-serif;
       color: var(--text);
-      background-color: var(--bg);
       background:
-        radial-gradient(800px 420px at 50% 0%, #18243c 0%, transparent 70%),
-        linear-gradient(180deg, var(--bg-2) 0%, var(--bg) 55%);
-      background-attachment: fixed;
-      min-height: 100vh;
+        radial-gradient(900px 500px at 8% -10%, #15336e 0%, transparent 60%),
+        linear-gradient(180deg, var(--bg-2) 0%, var(--bg-1) 58%);
     }
 
-    .container {
-      max-width: 1240px;
+    .bg-grid {
+      position: fixed;
+      inset: 0;
+      pointer-events: none;
+      opacity: 0.18;
+      background-image:
+        linear-gradient(to right, rgba(94, 140, 233, 0.2) 1px, transparent 1px),
+        linear-gradient(to bottom, rgba(94, 140, 233, 0.2) 1px, transparent 1px);
+      background-size: 32px 32px;
+      z-index: 0;
+    }
+
+    .shell-header,
+    .layout {
+      position: relative;
+      z-index: 1;
+      max-width: 1440px;
       margin: 0 auto;
-      padding: 40px 20px 36px;
+      width: 100%;
     }
 
-    .header {
-      border-bottom: 1px solid var(--line);
-      padding-bottom: 18px;
-      margin-bottom: 26px;
+    .shell-header {
+      position: sticky;
+      top: 0;
+      padding: 1.25rem 2rem;
+      border-bottom: 1px solid var(--card-border);
+      backdrop-filter: blur(12px);
+      background: rgba(2, 9, 28, 0.78);
       display: flex;
       justify-content: space-between;
-      align-items: flex-start;
-      gap: 16px;
+      align-items: center;
+      gap: 1rem;
     }
 
-    .header-copy { flex: 1; }
-
-    .feedback-btn {
-      text-decoration: none;
-      border: 1px solid #3a4a66;
-      color: var(--text);
-      background: rgba(17, 24, 39, .75);
-      border-radius: 10px;
-      padding: 10px 14px;
-      font-size: 13px;
-      white-space: nowrap;
-      transition: .2s ease;
-    }
-
-    .feedback-btn:hover {
-      border-color: #4f6790;
-      transform: translateY(-1px);
-    }
-
-    h1 {
+    .brand__title {
       margin: 0;
-      text-transform: uppercase;
-      letter-spacing: .18em;
-      font-size: clamp(38px, 5vw, 56px);
-      line-height: 1;
-      font-weight: 700;
+      font-family: "Space Grotesk", Inter, sans-serif;
+      font-size: clamp(1.5rem, 2.6vw, 2.25rem);
+      letter-spacing: 0.02em;
     }
 
-    .subtitle {
-      margin-top: 10px;
-      color: var(--muted);
-      font-size: clamp(14px, 2vw, 34px);
-    }
-
-    .grid {
-      display: grid;
-      grid-template-columns: repeat(5, minmax(0, 1fr));
-      grid-auto-rows: 1fr;
-      gap: 14px;
-    }
-
-    .card {
-      min-height: 116px;
-      text-decoration: none;
-      color: inherit;
-      border-radius: 14px;
-      border: 1px solid var(--line);
-      background: linear-gradient(115deg, var(--card) 0%, var(--card-2) 100%);
-      padding: 16px;
-      display: flex;
-      gap: 12px;
-      transition: .2s ease;
-    }
-
-    .card:hover {
-      transform: translateY(-2px);
-      border-color: #344360;
-      box-shadow: 0 10px 26px rgba(5, 8, 14, .42);
-    }
-
-    .icon {
-      font-size: 30px;
-      line-height: 1;
-      margin-top: 1px;
-    }
-
-    .card h2 {
-      margin: 0;
-      font-size: 15px;
-      line-height: 1.2;
-      font-weight: 650;
-    }
-
-    .card p {
-      margin: 8px 0 0;
-      font-size: 12px;
-      line-height: 1.35;
-      color: var(--muted);
-    }
-
-    .cross-tools {
-      margin-top: 18px;
-      border: 1px solid var(--line);
-      border-radius: 14px;
-      padding: 10px 12px 12px;
-      background: rgba(7, 13, 26, 0.55);
-    }
-
-    .cross-tools-title {
-      margin: 0 0 10px;
-      color: #98a8c5;
-      text-transform: uppercase;
-      letter-spacing: .12em;
-      font-size: 12px;
-      font-weight: 700;
-    }
-
-    .flow-card {
-      text-decoration: none;
-      color: inherit;
-      border: 1px solid #31405c;
-      border-radius: 12px;
-      padding: 10px 12px;
+    .header-actions {
       display: flex;
       align-items: center;
-      gap: 10px;
-      max-width: 320px;
-      background: linear-gradient(115deg, rgba(17,24,39,.75) 0%, rgba(26,34,52,.55) 100%);
-      transition: .2s ease;
+      gap: 0.75rem;
+      margin-left: auto;
     }
 
-    .flow-card:hover {
-      border-color: #4f6790;
-      transform: translateY(-1px);
-      box-shadow: 0 8px 20px rgba(4, 9, 18, .45);
-    }
-
-    .flow-icon { font-size: 24px; line-height: 1; }
-
-    .flow-name {
-      margin: 0;
-      font-size: 28px;
-      font-weight: 650;
-      line-height: 1.1;
-    }
-
-    .flow-note {
-      margin-top: 2px;
+    .search {
+      border: 1px solid rgba(79, 141, 255, 0.38);
+      background: rgba(6, 20, 51, 0.7);
+      border-radius: 0.75rem;
+      min-width: 360px;
+      display: flex;
+      align-items: center;
+      padding: 0 0.75rem;
       color: var(--muted);
-      font-size: 12px;
     }
 
-    footer {
-      margin-top: 20px;
-      border-top: 1px solid var(--line);
-      padding-top: 14px;
-      color: #7d879b;
-      text-align: center;
-      font-size: 13px;
+    .search input {
+      width: 100%;
+      border: 0;
+      outline: 0;
+      background: transparent;
+      color: var(--text);
+      font-size: 0.95rem;
+      padding: 0.7rem 0;
     }
 
-    @media (max-width: 1160px) { .grid { grid-template-columns: repeat(4, minmax(0, 1fr)); } }
-    @media (max-width: 940px)  { .grid { grid-template-columns: repeat(3, minmax(0, 1fr)); } }
-    @media (max-width: 700px)  { .grid { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
-    @media (max-width: 520px)  { .grid { grid-template-columns: 1fr; } }
-    @media (max-width: 720px)  { .header { flex-direction: column; align-items: flex-start; } }
+    .btn {
+      text-decoration: none;
+      border: 1px solid var(--card-border);
+      color: var(--text);
+      border-radius: 0.75rem;
+      background: rgba(10, 24, 56, 0.85);
+      padding: 0.72rem 1rem;
+      font-size: 0.9rem;
+      font-weight: 600;
+      white-space: nowrap;
+      transition: 0.2s ease;
+    }
+
+    .btn:hover {
+      border-color: var(--primary);
+      transform: translateY(-1px);
+    }
+
+    .layout {
+      padding: 1rem;
+      display: grid;
+      grid-template-columns: 260px 1fr;
+      gap: 0.9rem;
+    }
+
+    .sidebar,
+    .content {
+      border: 1px solid var(--card-border);
+      border-radius: 1rem;
+      background: rgba(4, 15, 43, 0.72);
+    }
+
+    .sidebar { padding: 1rem; }
+
+    .sidebar h2,
+    .section-title {
+      margin: 0;
+      font-size: 2rem;
+    }
+
+    .sidebar h2 { font-size: 2rem; margin-bottom: 0.9rem; }
+
+    #nav-list {
+      display: grid;
+      gap: 0.45rem;
+      margin-bottom: 0.9rem;
+    }
+
+    .nav-btn {
+      border: 1px solid transparent;
+      background: rgba(20, 35, 72, 0.65);
+      color: var(--text);
+      border-radius: 0.65rem;
+      padding: 0.55rem 0.65rem;
+      text-align: left;
+      font-size: 0.95rem;
+      cursor: pointer;
+      transition: 0.2s ease;
+    }
+
+    .nav-btn:hover,
+    .nav-btn.active {
+      border-color: var(--primary);
+      background: rgba(79, 141, 255, 0.15);
+    }
+
+    .status-card {
+      border: 1px solid rgba(55, 207, 159, 0.35);
+      background: rgba(10, 55, 61, 0.35);
+      border-radius: 0.85rem;
+      padding: 0.85rem;
+      color: #c3efe2;
+    }
+
+    .status-card h3 { margin: 0 0 0.55rem; }
+    .status-card p { margin: 0; color: #c1ddd5; }
+
+    .content { padding: 1rem; }
+
+    .section {
+      margin-bottom: 1.1rem;
+    }
+
+    .section p {
+      color: var(--muted);
+      margin: 0.45rem 0 0.8rem;
+    }
+
+    .direction-grid {
+      display: grid;
+      grid-template-columns: repeat(5, minmax(0, 1fr));
+      gap: 0.9rem;
+    }
+
+    .direction-card {
+      min-height: 122px;
+      border-radius: 0.9rem;
+      border: 1px solid var(--card-border);
+      background: linear-gradient(130deg, rgba(13, 28, 57, 0.95), rgba(12, 28, 64, 0.5));
+      color: var(--text);
+      text-decoration: none;
+      padding: 0.9rem;
+      transition: 0.2s ease;
+      display: block;
+    }
+
+    .direction-card:hover,
+    .direction-card.active {
+      border-color: var(--primary);
+      transform: translateY(-1px);
+    }
+
+    .direction-card h3 {
+      margin: 0;
+      font-size: 1.05rem;
+    }
+
+    .direction-card p {
+      margin: 0.55rem 0 0;
+      color: var(--muted);
+    }
+
+    .integration-zone {
+      border: 1px solid var(--card-border);
+      border-radius: 0.9rem;
+      padding: 0.85rem;
+      background: rgba(11, 28, 67, 0.35);
+      display: grid;
+      gap: 0.8rem;
+    }
+
+    .integration-card {
+      border: 1px solid rgba(93, 129, 209, 0.35);
+      border-radius: 0.85rem;
+      padding: 0.8rem;
+      background: rgba(5, 19, 49, 0.55);
+    }
+
+    .integration-top {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 0.6rem;
+    }
+
+    .badge {
+      font-size: 0.75rem;
+      border: 1px solid rgba(109, 151, 237, 0.42);
+      border-radius: 999px;
+      padding: 0.15rem 0.55rem;
+      color: #b5cdff;
+    }
+
+    .widget-host {
+      margin-top: 0.7rem;
+      border: 1px dashed rgba(123, 159, 235, 0.35);
+      border-radius: 0.7rem;
+      min-height: 86px;
+      display: grid;
+      place-items: center;
+      color: var(--muted);
+    }
+
+    @media (max-width: 1280px) {
+      .direction-grid { grid-template-columns: repeat(4, minmax(0, 1fr)); }
+    }
+
+    @media (max-width: 980px) {
+      .shell-header {
+        flex-direction: column;
+        align-items: flex-start;
+      }
+
+      .header-actions {
+        width: 100%;
+      }
+
+      .search { min-width: 100%; }
+
+      .layout {
+        grid-template-columns: 1fr;
+      }
+
+      .direction-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+    }
+
+    @media (max-width: 640px) {
+      .direction-grid { grid-template-columns: 1fr; }
+      .header-actions { flex-direction: column; align-items: stretch; }
+    }
   </style>
 </head>
 <body>
-  <div class="container">
-    <header class="header">
-      <div class="header-copy">
-        <h1>Россильбер</h1>
-        <div class="subtitle">Корпоративный портал</div>
-      </div>
+  <div class="bg-grid" aria-hidden="true"></div>
+
+  <header class="shell-header">
+    <div class="brand">
+      <h1 class="brand__title">Корпоративный портал Россильбер</h1>
+    </div>
+    <div class="header-actions">
+      <label class="search" aria-label="Поиск инструментов и направлений">
+        🔎
+        <input id="global-search" type="search" placeholder="Глобальный поиск по направлениям и сервисам">
+      </label>
       <a
-        class="feedback-btn"
+        class="btn"
         href="mailto:patrushev-ea@mail.ru?subject=%D0%9E%D0%B1%D1%80%D0%B0%D1%82%D0%BD%D0%B0%D1%8F%20%D1%81%D0%B2%D1%8F%D0%B7%D1%8C%20%D0%BF%D0%BE%20%D0%BA%D0%BE%D1%80%D0%BF%D0%BE%D1%80%D0%B0%D1%82%D0%B8%D0%B2%D0%BD%D0%BE%D0%BC%D1%83%20%D0%BF%D0%BE%D1%80%D1%82%D0%B0%D0%BB%D1%83&body=%D0%98%D0%BC%D1%8F%3A%20%0A%D0%9F%D0%BE%D0%B4%D1%80%D0%B0%D0%B7%D0%B4%D0%B5%D0%BB%D0%B5%D0%BD%D0%B8%D0%B5%3A%20%0A%D0%A1%D0%BE%D0%BE%D0%B1%D1%89%D0%B5%D0%BD%D0%B8%D0%B5%3A%20"
       >Обратная связь</a>
-    </header>
+    </div>
+  </header>
 
-    <main class="grid" id="departmentsGrid"></main>
+  <main class="layout">
+    <aside class="sidebar">
+      <h2>Навигация</h2>
+      <nav id="nav-list" aria-label="Список направлений"></nav>
+      <section class="status-card">
+        <h3>Шина интеграций</h3>
+        <p>Shell App готов к подключению микрофронтендов через:</p>
+        <ul>
+          <li>Module Federation</li>
+          <li>iFrame-виджеты</li>
+          <li>Web Components</li>
+        </ul>
+      </section>
+    </aside>
 
-    <section class="cross-tools" aria-label="Сквозные инструменты">
-      <h2 class="cross-tools-title">Сквозные инструменты</h2>
-      <a class="flow-card" href="flow.html" title="Flow — прототипирование и mindmap-проекты">
-        <span class="flow-icon">🔗</span>
-        <span>
-          <strong class="flow-name">Flow</strong>
-          <div class="flow-note">Прототипирование и mindmap-проекты</div>
-        </span>
-      </a>
+    <section class="content">
+      <section class="section">
+        <h2 class="section-title">Направления</h2>
+        <p>Промышленный дашборд без привязки к серверному стеку.</p>
+        <div class="direction-grid" id="departmentsGrid"></div>
+      </section>
+
+
+      <section class="section">
+        <h2 class="section-title">Сквозные инструменты</h2>
+        <p>Сервисы, доступные независимо от выбранного направления.</p>
+        <div class="integration-zone">
+          <article class="integration-card">
+            <div class="integration-top">
+              <h3>Flow</h3>
+              <span class="badge">Web Component</span>
+            </div>
+            <p>Прототипирование и mindmap-проекты.</p>
+            <a class="btn" href="flow.html">Открыть Flow</a>
+          </article>
+        </div>
+      </section>
+
+      <section class="section">
+        <h2 class="section-title">Площадка подключения сервисов</h2>
+        <p>Выберите направление, чтобы увидеть контейнеры под конкретные системы.</p>
+        <div class="integration-zone" id="integration-zone"></div>
+      </section>
     </section>
-
-    <footer>разработал Патрушев Е.</footer>
-  </div>
+  </main>
 
   <script>
     const departments = [
@@ -244,20 +378,112 @@
       { key: 'ai', icon: '🧠', name: 'Искусственный интеллект', note: 'Автоматизация и ИИ' }
     ];
 
+    const serviceTemplates = {
+      default: { title: 'Сервис не подключен', mode: 'TBD', note: 'Создайте запись в services.manifest.json и задайте режим встраивания.' },
+      flow: { title: 'Flow', mode: 'Web Component', note: 'Прототипирование и mindmap-проекты.' }
+    };
+
+    const quickTools = [
+      { name: 'Flow', href: 'flow.html', service: serviceTemplates.flow }
+    ];
+
     const grid = document.getElementById('departmentsGrid');
+    const navList = document.getElementById('nav-list');
+    const searchInput = document.getElementById('global-search');
+    const integrationZone = document.getElementById('integration-zone');
+
+    const routeByDepartment = (key) => {
+      window.location.href = `departments.html?dept=${key}`;
+    };
+
+    const setIntegrationState = (template = serviceTemplates.default) => {
+      integrationZone.innerHTML = `
+        <article class="integration-card">
+          <div class="integration-top">
+            <h3>${template.title}</h3>
+            <span class="badge">${template.mode}</span>
+          </div>
+          <p>${template.note}</p>
+          <div class="widget-host">Плейсхолдер контейнера для будущего сервиса</div>
+        </article>
+      `;
+    };
+
+    const setActiveDepartment = (key) => {
+      document.querySelectorAll('.nav-btn').forEach((node) => {
+        node.classList.toggle('active', node.dataset.dept === key);
+      });
+      document.querySelectorAll('.direction-card').forEach((node) => {
+        node.classList.toggle('active', node.dataset.dept === key);
+      });
+    };
+
     departments.forEach((department) => {
       const card = document.createElement('a');
-      card.className = 'card';
+      card.className = 'direction-card';
       card.href = `departments.html?dept=${department.key}`;
+      card.dataset.dept = department.key;
       card.innerHTML = `
-        <div class="icon">${department.icon}</div>
-        <div>
-          <h2>${department.name}</h2>
-          <p>${department.note}</p>
-        </div>
+        <h3>${department.icon} ${department.name}</h3>
+        <p>${department.note}</p>
       `;
+      card.addEventListener('mouseenter', () => setActiveDepartment(department.key));
       grid.appendChild(card);
+
+      const navBtn = document.createElement('button');
+      navBtn.className = 'nav-btn';
+      navBtn.type = 'button';
+      navBtn.dataset.dept = department.key;
+      navBtn.textContent = department.name;
+      navBtn.addEventListener('click', () => routeByDepartment(department.key));
+      navBtn.addEventListener('mouseenter', () => setActiveDepartment(department.key));
+      navList.appendChild(navBtn);
     });
+
+    const searchIndex = [
+      ...departments.map((department) => ({
+        label: department.name,
+        aliases: `${department.name} ${department.note}`.toLowerCase(),
+        action: () => routeByDepartment(department.key)
+      })),
+      ...quickTools.map((tool) => ({
+        label: tool.name,
+        aliases: tool.name.toLowerCase(),
+        action: () => {
+          setIntegrationState(tool.service);
+          window.location.href = tool.href;
+        }
+      }))
+    ];
+
+    searchInput.addEventListener('keydown', (event) => {
+      if (event.key !== 'Enter') {
+        return;
+      }
+
+      const query = searchInput.value.trim().toLowerCase();
+      if (!query) {
+        return;
+      }
+
+      const match = searchIndex.find((item) => item.aliases.includes(query));
+      if (match) {
+        match.action();
+      }
+    });
+
+    searchInput.addEventListener('input', () => {
+      const query = searchInput.value.trim().toLowerCase();
+      if (!query) {
+        setActiveDepartment('');
+        return;
+      }
+
+      const match = departments.find((department) => (`${department.name} ${department.note}`).toLowerCase().includes(query));
+      setActiveDepartment(match ? match.key : '');
+    });
+
+    setIntegrationState(serviceTemplates.default);
   </script>
 </body>
 </html>
