@@ -5,8 +5,15 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Россильбер | HR‑Детектор AI</title>
   <script src="https://cdn.tailwindcss.com"></script>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/4.8.69/pdf.min.mjs" type="module"></script>
   <script src="https://unpkg.com/mammoth@1.8.0/mammoth.browser.min.js"></script>
+  <script type="module" src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/4.8.69/pdf.min.mjs"></script>
+  <style>
+    .gauge-track {
+      background: conic-gradient(#ef4444 0deg, #f97316 120deg, #22c55e 240deg, #22c55e 360deg);
+      mask: radial-gradient(circle at center, transparent 54%, black 55%);
+      -webkit-mask: radial-gradient(circle at center, transparent 54%, black 55%);
+    }
+  </style>
 </head>
 <body class="bg-slate-100 text-slate-800 min-h-screen">
   <main class="max-w-6xl mx-auto px-4 py-8 md:px-8">
@@ -17,278 +24,101 @@
     <header class="bg-white rounded-2xl p-6 md:p-8 border border-slate-200 shadow-sm mb-8">
       <h1 class="text-3xl md:text-4xl font-extrabold text-indigo-900 mb-3">HR‑Детектор AI</h1>
       <p class="text-slate-600 max-w-4xl">
-        Анализ резюме, сопроводительных писем и произвольных текстов на предмет вероятного использования генеративных нейросетей.
-        Поддержка: вставка текста, .txt, .docx и .pdf.
+        Проверка резюме и сопроводительных писем на вероятность генерации нейросетью. Поддержка форматов: простой текст, PDF и Word (.docx).
       </p>
-      <div class="mt-4 p-4 rounded-xl bg-amber-50 border border-amber-200 text-amber-900 text-sm leading-relaxed">
-        <strong>Важно:</strong> результаты являются ориентировочными и не могут быть единственным основанием для кадровых решений.
-        Даже у индустриальных детекторов бывают ложные срабатывания и пропуски.
+      <div class="mt-4 grid gap-3 md:grid-cols-2">
+        <div class="rounded-xl bg-indigo-50 border border-indigo-200 p-4 text-sm text-indigo-900">
+          <p class="font-semibold mb-1">Модель в браузере</p>
+          <p>Работает локально через WebLLM, без отправки данных на сервер.</p>
+        </div>
+        <div class="rounded-xl bg-amber-50 border border-amber-200 p-4 text-sm text-amber-900">
+          <p class="font-semibold mb-1">Только итоговый %</p>
+          <p>Интерфейс выводит только вероятность AI‑генерации в процентах.</p>
+        </div>
       </div>
     </header>
 
     <section class="grid grid-cols-1 lg:grid-cols-2 gap-6">
       <div class="bg-white rounded-2xl p-6 border border-slate-200 shadow-sm">
-        <h2 class="text-xl font-bold text-indigo-900 mb-4">1) Загрузка текста</h2>
+        <h2 class="text-xl font-bold text-indigo-900 mb-4">1) Входные данные</h2>
 
         <label for="fileInput" class="block text-sm font-semibold text-slate-700 mb-2">Файл (.txt, .docx, .pdf)</label>
         <input id="fileInput" type="file" accept=".txt,.docx,.pdf" class="w-full mb-5 text-sm">
 
         <label for="textInput" class="block text-sm font-semibold text-slate-700 mb-2">Или вставьте текст</label>
-        <textarea id="textInput" rows="14" class="w-full border border-slate-300 rounded-xl p-3 focus:outline-none focus:ring-2 focus:ring-indigo-400" placeholder="Вставьте резюме или сопроводительное письмо..."></textarea>
+        <textarea id="textInput" rows="14" class="w-full border border-slate-300 rounded-xl p-3 focus:outline-none focus:ring-2 focus:ring-indigo-400" placeholder="Вставьте текст резюме..."></textarea>
 
-        <button id="analyzeBtn" class="mt-4 w-full bg-indigo-600 hover:bg-indigo-700 text-white font-semibold rounded-xl px-4 py-3 transition">
-          Проверить
-        </button>
+        <div class="mt-4 space-y-2">
+          <button id="loadBtn" class="w-full bg-slate-900 hover:bg-black text-white font-semibold rounded-xl px-4 py-3 transition">Загрузить модель</button>
+          <button id="analyzeBtn" class="w-full bg-indigo-600 hover:bg-indigo-700 text-white font-semibold rounded-xl px-4 py-3 transition" disabled>Рассчитать % AI</button>
+        </div>
+
+        <div class="mt-4 text-sm rounded-xl border border-slate-200 bg-slate-50 p-4">
+          <p class="font-semibold text-slate-700">Статус модели: <span id="statusText" class="text-slate-900">Не загружена</span></p>
+          <div id="progressWrap" class="hidden mt-3">
+            <div class="h-2 w-full bg-slate-200 rounded-full overflow-hidden">
+              <div id="progressBar" class="h-2 bg-indigo-600 transition-all duration-300" style="width: 0%"></div>
+            </div>
+            <p id="progressText" class="mt-2 text-xs text-slate-600">0%</p>
+          </div>
+        </div>
       </div>
 
       <div class="bg-white rounded-2xl p-6 border border-slate-200 shadow-sm">
-        <h2 class="text-xl font-bold text-indigo-900 mb-4">2) Результаты</h2>
+        <h2 class="text-xl font-bold text-indigo-900 mb-4">2) Результат</h2>
 
-        <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 mb-5">
-          <div class="rounded-xl border border-emerald-200 bg-emerald-50 p-4">
-            <p class="text-sm text-emerald-900">Уникальность текста</p>
-            <p id="uniquenessValue" class="text-3xl font-extrabold text-emerald-700">—</p>
+        <div class="flex flex-col items-center justify-center gap-5 py-6">
+          <div class="relative h-52 w-52 rounded-full gauge-track border border-slate-200">
+            <div class="absolute inset-0 flex flex-col items-center justify-center text-center">
+              <p class="text-xs uppercase tracking-wider text-slate-500">Вероятность AI</p>
+              <p id="percentValue" class="text-5xl font-extrabold text-slate-900">—%</p>
+            </div>
           </div>
-          <div class="rounded-xl border border-orange-200 bg-orange-50 p-4">
-            <p class="text-sm text-orange-900">Вероятность AI-текста</p>
-            <p id="aiValue" class="text-3xl font-extrabold text-orange-700">—</p>
-          </div>
+          <p id="resultLabel" class="text-sm text-slate-600">Загрузите модель и выполните анализ.</p>
         </div>
-
-        <div class="mb-4">
-          <h3 class="font-bold text-slate-800 mb-2">Найденные триггеры</h3>
-          <ul id="triggersList" class="text-sm text-slate-700 space-y-2 list-disc pl-5">
-            <li>Пока нет данных.</li>
-          </ul>
-        </div>
-
-        <div id="statsBlock" class="rounded-xl bg-slate-50 border border-slate-200 p-4 text-sm text-slate-700 leading-relaxed"></div>
       </div>
-    </section>
-
-    <section class="mt-8 bg-white rounded-2xl p-6 border border-slate-200 shadow-sm">
-      <h2 class="text-xl font-bold text-indigo-900 mb-3">Библиотека признаков (версия HR‑v1)</h2>
-      <p class="text-slate-600 text-sm leading-relaxed mb-3">
-        Логика объединяет вашу выжимку и общедоступные подходы детектирования: артефакты форматирования, лексические клише,
-        структурные паттерны, признаки «ровного» AI-стиля (низкая burstiness / средняя длина предложений) и HR-специфичные маркеры.
-      </p>
-      <pre class="bg-slate-900 text-slate-100 text-xs rounded-xl p-4 overflow-auto" id="libraryPreview"></pre>
-      <p class="text-xs text-slate-500 mt-3">
-        Источники подходов: материалы Turnitin о вероятностной природе детекции и пороге 20%, а также исследования об обходе детекторов
-        через парафраз и ограниченной надежности универсального определения AI-авторства.
-      </p>
     </section>
   </main>
 
-  <script>
-    const FEATURE_LIBRARY = {
-      high_probability_artifacts: {
-        weight: 0.8,
-        title: 'Артефакты форматирования',
-        patterns: [
-          /\*\*[^*]{2,60}\*\*/g,
-          /(^|\n)#{2,4}\s+[А-ЯA-Zа-яa-z0-9]/g,
-          /(^|\n)[\-*]\s+\*\*[^*]{2,60}\*\*\s*:/g,
-          /\b(подводя итог|в заключение хочется отметить|в конечном итоге)\b/gi
-        ]
-      },
-      medium_probability_cliches: {
-        weight: 0.35,
-        title: 'Лексические AI-клише',
-        patterns: [
-          /\b(стоит отметить|важно подчеркнуть|нельзя не упомянуть|безусловно|более того|в свою очередь|с другой стороны)\b/gi,
-          /\b(динамично развивающ[а-я]+ сред[а-я]+|уникальн[а-я]+ спектр навыков|синерги[яи]|многогранн[а-я]+ подход)\b/gi,
-          /\b(ориентироваться на|способствовать|интегрировать|служить катализатором|обогатить опыт)\b/gi
-        ]
-      },
-      structural_flags: {
-        weight: 0.45,
-        title: 'Синтаксис и структура',
-        patterns: [
-          /\b(с одной стороны)[\s\S]{0,220}(с другой стороны)\b/gi,
-          /\b(была|были|было)\s+[а-яё]+(на|ны|но)\b/gi,
-          /\b(введение|заключение|итоги)\b/gi
-        ]
-      },
-      hr_specific_flags: {
-        weight: 0.5,
-        title: 'HR-специфичные сигналы',
-        patterns: [
-          /\b(увеличил[аи]?|повысил[аи]?|снизил[аи]?)\s+[а-яё\s]{0,25}на\s+(10|20|30|40|50|60|70|80|90|100)%\b/gi,
-          /\b(успешно решал возникающие проблемы|находил креативные подходы к сложным задачам)\b/gi,
-          /\b(с огромным энтузиазмом подаю заявку|навыки идеально соответствуют вашим ценностям|уважаемой компании)\b/gi
-        ]
-      },
-      ngram_patterns: {
-        weight: 0.4,
-        title: 'N-граммы штампованных конструкций',
-        patterns: [
-          /\b(важно отметить, что|в заключение хочется|учитывая вышесказанное|в современном динамичном мире)\b/gi
-        ]
-      }
-    };
+  <script type="module">
+    import { CreateMLCEngine } from 'https://esm.run/@mlc-ai/web-llm';
+
+    const MODEL_CANDIDATES = [
+      'Qwen2.5-0.5B-Instruct-q4f16_1-MLC',
+      'Llama-3.2-1B-Instruct-q4f16_1-MLC',
+      'Phi-3.5-mini-instruct-q4f16_1-MLC'
+    ];
+
+    const SYSTEM_PROMPT = `Ты HR-детектор AI текста. На входе резюме. Верни только JSON формата {"ai_probability": N}. N — целое от 0 до 100. Никаких пояснений, текста, markdown, комментариев.`;
 
     const fileInput = document.getElementById('fileInput');
     const textInput = document.getElementById('textInput');
+    const loadBtn = document.getElementById('loadBtn');
     const analyzeBtn = document.getElementById('analyzeBtn');
-    const uniquenessValue = document.getElementById('uniquenessValue');
-    const aiValue = document.getElementById('aiValue');
-    const triggersList = document.getElementById('triggersList');
-    const statsBlock = document.getElementById('statsBlock');
-    const libraryPreview = document.getElementById('libraryPreview');
+    const statusText = document.getElementById('statusText');
+    const progressWrap = document.getElementById('progressWrap');
+    const progressBar = document.getElementById('progressBar');
+    const progressText = document.getElementById('progressText');
+    const percentValue = document.getElementById('percentValue');
+    const resultLabel = document.getElementById('resultLabel');
 
-    libraryPreview.textContent = JSON.stringify(
-      Object.fromEntries(Object.entries(FEATURE_LIBRARY).map(([key, config]) => [
-        key,
-        {
-          weight: config.weight,
-          title: config.title,
-          patterns: config.patterns.map((pattern) => pattern.toString())
-        }
-      ])),
-      null,
-      2
-    );
+    let engine = null;
+    let modelName = null;
+    let loading = false;
 
     function clamp(value, min, max) {
       return Math.max(min, Math.min(max, value));
     }
 
-    function splitSentences(text) {
-      return text
-        .split(/[.!?]+/)
-        .map((sentence) => sentence.trim())
-        .filter(Boolean);
-    }
-
-    function extractWords(text) {
-      return (text.toLowerCase().match(/[а-яёa-z0-9-]{2,}/gi) || []);
-    }
-
-    function sentenceLengthStats(sentences) {
-      if (!sentences.length) {
-        return { average: 0, stdDev: 0 };
-      }
-
-      const lengths = sentences.map((sentence) => extractWords(sentence).length).filter(Boolean);
-      if (!lengths.length) {
-        return { average: 0, stdDev: 0 };
-      }
-
-      const avg = lengths.reduce((sum, value) => sum + value, 0) / lengths.length;
-      const variance = lengths.reduce((sum, value) => sum + ((value - avg) ** 2), 0) / lengths.length;
-      return { average: avg, stdDev: Math.sqrt(variance) };
-    }
-
-    function calculateUniqueness(words) {
-      if (words.length < 20) {
-        return 50;
-      }
-
-      const uniqWords = new Set(words).size;
-      const lexicalDiversity = uniqWords / words.length;
-
-      const trigrams = [];
-      for (let i = 0; i < words.length - 2; i += 1) {
-        trigrams.push(`${words[i]} ${words[i + 1]} ${words[i + 2]}`);
-      }
-
-      const trigramCounts = trigrams.reduce((acc, trigram) => {
-        acc[trigram] = (acc[trigram] || 0) + 1;
-        return acc;
-      }, {});
-
-      const repeatedTriGrams = Object.values(trigramCounts).filter((count) => count > 1).length;
-      const repetitionPenalty = clamp((repeatedTriGrams / Math.max(1, trigrams.length)) * 100, 0, 35);
-
-      const base = (lexicalDiversity * 100) - repetitionPenalty;
-      return clamp(Math.round(base), 15, 99);
-    }
-
-    function calculateAiProbability(text) {
-      const result = {
-        score: 0,
-        maxScore: 0,
-        triggers: []
-      };
-
-      Object.values(FEATURE_LIBRARY).forEach((category) => {
-        category.patterns.forEach((pattern) => {
-          const matches = text.match(pattern);
-          result.maxScore += category.weight;
-          if (matches && matches.length) {
-            const hitStrength = Math.min(matches.length, 3) / 3;
-            const delta = category.weight * hitStrength;
-            result.score += delta;
-            result.triggers.push({
-              category: category.title,
-              match: matches[0],
-              count: matches.length,
-              score: delta
-            });
-          }
-        });
-      });
-
-      const sentences = splitSentences(text);
-      const stats = sentenceLengthStats(sentences);
-
-      if (stats.average >= 12 && stats.average <= 22 && stats.stdDev < 6) {
-        result.score += 0.35;
-        result.maxScore += 0.35;
-        result.triggers.push({
-          category: 'Ровная длина предложений',
-          match: `avg=${stats.average.toFixed(1)}, std=${stats.stdDev.toFixed(1)}`,
-          count: 1,
-          score: 0.35
-        });
-      }
-
-      const probability = result.maxScore ? clamp((result.score / result.maxScore) * 100, 2, 98) : 0;
-      return { probability: Math.round(probability), triggers: result.triggers, sentenceStats: stats, sentenceCount: sentences.length };
-    }
-
-    function renderResult(text) {
-      const normalized = text.replace(/\s+/g, ' ').trim();
-      if (!normalized) {
-        alert('Добавьте текст или загрузите файл для анализа.');
-        return;
-      }
-
-      const words = extractWords(normalized);
-      const uniqueness = calculateUniqueness(words);
-      const aiData = calculateAiProbability(normalized);
-
-      uniquenessValue.textContent = `${uniqueness}%`;
-      aiValue.textContent = `${aiData.probability}%`;
-
-      triggersList.innerHTML = '';
-      if (!aiData.triggers.length) {
-        triggersList.innerHTML = '<li>Явных сигнатур не обнаружено. Это не гарантирует отсутствие AI-генерации.</li>';
-      } else {
-        aiData.triggers
-          .sort((a, b) => b.score - a.score)
-          .slice(0, 8)
-          .forEach((trigger) => {
-            const item = document.createElement('li');
-            item.innerHTML = `<strong>${trigger.category}</strong>: «${trigger.match}» (совпадений: ${trigger.count})`;
-            triggersList.appendChild(item);
-          });
-      }
-
-      statsBlock.innerHTML = `
-        <p><strong>Объём:</strong> ${words.length} слов, ${aiData.sentenceCount} предложений.</p>
-        <p><strong>Средняя длина предложения:</strong> ${aiData.sentenceStats.average.toFixed(1)} слов.</p>
-        <p><strong>Вариативность длины предложений (burstiness proxy):</strong> σ=${aiData.sentenceStats.stdDev.toFixed(1)}.</p>
-        <p class="mt-2 text-xs text-slate-500">Метрика вероятности AI опирается на эвристики и не является экспертизой или доказательством авторства.</p>
-      `;
+    function setProgress(percent, text) {
+      const pct = clamp(Math.round(percent), 0, 100);
+      progressBar.style.width = `${pct}%`;
+      progressText.textContent = text || `${pct}%`;
     }
 
     async function extractTextFromPdf(file) {
       const pdfjsLib = window['pdfjs-dist/build/pdf'];
-      if (!pdfjsLib) {
-        throw new Error('PDF-движок не загружен.');
-      }
+      if (!pdfjsLib) throw new Error('PDF модуль не загружен');
 
       pdfjsLib.GlobalWorkerOptions.workerSrc = 'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/4.8.69/pdf.worker.min.mjs';
       const buffer = await file.arrayBuffer();
@@ -301,48 +131,143 @@
         const pageText = content.items.map((item) => item.str).join(' ');
         fullText += ` ${pageText}`;
       }
+
       return fullText.trim();
     }
 
-    async function readFileText(file) {
-      const name = file.name.toLowerCase();
-      if (name.endsWith('.txt')) {
-        return file.text();
-      }
+    async function readInputText() {
+      const directText = textInput.value.trim();
+      if (directText) return directText;
 
+      const file = fileInput.files?.[0];
+      if (!file) throw new Error('Добавьте текст или загрузите файл');
+
+      const name = file.name.toLowerCase();
+      if (name.endsWith('.txt')) return (await file.text()).trim();
       if (name.endsWith('.docx')) {
         const arrayBuffer = await file.arrayBuffer();
         const result = await window.mammoth.extractRawText({ arrayBuffer });
-        return result.value || '';
+        return (result.value || '').trim();
       }
+      if (name.endsWith('.pdf')) return extractTextFromPdf(file);
 
-      if (name.endsWith('.pdf')) {
-        return extractTextFromPdf(file);
-      }
-
-      throw new Error('Неподдерживаемый формат файла. Используйте .txt, .docx или .pdf.');
+      throw new Error('Неподдерживаемый формат. Используйте .txt, .docx или .pdf');
     }
 
-    analyzeBtn.addEventListener('click', async () => {
+    function parsePercent(rawText) {
+      const trimmed = rawText.trim();
+      try {
+        const parsed = JSON.parse(trimmed);
+        if (typeof parsed.ai_probability === 'number') {
+          return clamp(Math.round(parsed.ai_probability), 0, 100);
+        }
+      } catch (_) {
+        const jsonLike = trimmed.match(/\{[\s\S]*\}/);
+        if (jsonLike) {
+          try {
+            const parsed = JSON.parse(jsonLike[0]);
+            if (typeof parsed.ai_probability === 'number') {
+              return clamp(Math.round(parsed.ai_probability), 0, 100);
+            }
+          } catch (_) {
+            // ignore
+          }
+        }
+      }
+
+      const numberMatch = trimmed.match(/(\d{1,3})/);
+      if (!numberMatch) throw new Error('Модель не вернула процент');
+      return clamp(Number(numberMatch[1]), 0, 100);
+    }
+
+    async function loadModel() {
+      if (loading) return;
+
+      loading = true;
+      loadBtn.disabled = true;
       analyzeBtn.disabled = true;
-      analyzeBtn.textContent = 'Анализируем...';
+      progressWrap.classList.remove('hidden');
+      statusText.textContent = 'Загрузка модели...';
+      setProgress(0, 'Подготовка...');
 
       try {
-        let text = textInput.value.trim();
+        let lastError = null;
 
-        if (!text && fileInput.files && fileInput.files[0]) {
-          text = await readFileText(fileInput.files[0]);
-          textInput.value = text;
+        for (const candidate of MODEL_CANDIDATES) {
+          try {
+            setProgress(0, `Пробуем: ${candidate}`);
+            engine = await CreateMLCEngine(candidate, {
+              initProgressCallback: (info) => {
+                const p = (info.progress || 0) * 100;
+                setProgress(p, info.text || `Загрузка ${Math.round(p)}%`);
+              }
+            });
+            modelName = candidate;
+            break;
+          } catch (error) {
+            lastError = error;
+          }
         }
 
-        renderResult(text);
+        if (!engine) {
+          throw lastError || new Error('Не удалось загрузить модель');
+        }
+
+        statusText.textContent = `Готово: ${modelName}`;
+        setProgress(100, 'Модель загружена');
+        analyzeBtn.disabled = false;
       } catch (error) {
-        alert(`Ошибка анализа: ${error.message}`);
+        statusText.textContent = `Ошибка: ${error.message}`;
+        setProgress(0, 'Ошибка загрузки');
+        engine = null;
+        modelName = null;
+      } finally {
+        loading = false;
+        loadBtn.disabled = false;
+      }
+    }
+
+    async function analyzeResume() {
+      if (!engine) {
+        resultLabel.textContent = 'Сначала загрузите модель.';
+        return;
+      }
+
+      analyzeBtn.disabled = true;
+      loadBtn.disabled = true;
+      statusText.textContent = 'Анализ текста...';
+      resultLabel.textContent = 'Выполняется расчёт...';
+
+      try {
+        const inputText = await readInputText();
+        if (!inputText) throw new Error('Пустой текст');
+
+        const completion = await engine.chat.completions.create({
+          messages: [
+            { role: 'system', content: SYSTEM_PROMPT },
+            { role: 'user', content: inputText.slice(0, 12000) }
+          ],
+          temperature: 0,
+          max_tokens: 40,
+          stream: false
+        });
+
+        const raw = completion.choices?.[0]?.message?.content || '';
+        const percent = parsePercent(raw);
+
+        percentValue.textContent = `${percent}%`;
+        resultLabel.textContent = 'Результат рассчитан.';
+        statusText.textContent = `Готово: ${modelName}`;
+      } catch (error) {
+        resultLabel.textContent = `Ошибка анализа: ${error.message}`;
       } finally {
         analyzeBtn.disabled = false;
-        analyzeBtn.textContent = 'Проверить';
+        loadBtn.disabled = false;
       }
-    });
+    }
+
+    loadBtn.addEventListener('click', loadModel);
+    analyzeBtn.addEventListener('click', analyzeResume);
   </script>
 </body>
 </html>
